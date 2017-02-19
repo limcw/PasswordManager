@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Password Manager</string>
+    <string name="add_account_button">Add New Account</string>
+    <string name="error_add_account">Unable to add or save account. Please fill in all the fields</string>
+    <string name="success_add_account">Successfully added account</string>
+    <string name="taken_account_title">Title has already been taken. Please choose another title</string>
+    <string name="success_delete_account">Successfully delete account</string>
+    <string name="error_delete_account">Failed to delete account</string>
+    <string name="success_update_account">Successfully update account</string>
+</resources>
