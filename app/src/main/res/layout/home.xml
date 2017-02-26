@@ -20,11 +20,11 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:cursorVisible="false"
             android:elevation="0dp"
-            />
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="3dp"
             android:background="@android:color/darker_gray"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:text="Existing Accounts"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:layout_marginBottom="15dp"/>
 
         <android.support.v7.widget.RecyclerView

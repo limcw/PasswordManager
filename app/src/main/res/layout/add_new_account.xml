@@ -76,7 +76,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginRight="15dp">
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,12 +87,14 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="5dp"
-                android:imeOptions="flagNoExtractUi"/>
+                android:imeOptions="flagNoExtractUi"
+                android:layout_weight="1"/>
             <ImageButton
                 android:id="@+id/view_password_button"
                 android:layout_width="45dp"
                 android:layout_height="40dp"
-                android:src="@drawable/view_password"/>
+                android:src="@drawable/view_password"
+                android:background="?attr/colorAccent"/>
         </LinearLayout>
 
         <LinearLayout
@@ -103,13 +106,15 @@
                 android:text="Add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/add_button"/>
+                android:id="@+id/add_button"
+                style="@style/Widget.AppCompat.Button.Colored"/>
 
             <Button
                 android:text="Save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/save_button"/>
+                android:id="@+id/save_button"
+                style="@style/Widget.AppCompat.Button.Colored"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

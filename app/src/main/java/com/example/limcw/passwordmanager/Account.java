@@ -18,7 +18,7 @@ public class Account {
         setURL(url);
         setUsername(username);
         setPassword(password);
-        setDate(date);
+        setLastUpdated(date);
     }
 
     public Account(String title){
@@ -58,11 +58,11 @@ public class Account {
         mPassword = password;
     }
 
-    public Date getDate() {
+    public Date getLastUpdated() {
         return mDate;
     }
 
-    public void setDate(Date date) {
+    public void setLastUpdated(Date date) {
         mDate = date;
     }
 }

@@ -1,8 +1,10 @@
 package com.example.limcw.passwordmanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +18,8 @@ import android.widget.Toast;
 
 import java.util.Date;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by limcw on 2/17/2017.
  */
@@ -23,11 +27,18 @@ import java.util.Date;
 public class AddAccountFragment extends Fragment {
 
     private String status;
+    private static final String EXTRA_RESULT_TITLE = "com.example.limcw.passwordmanager.result_title";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         status = (String) getActivity().getIntent().getSerializableExtra(AddAccountActivity.EXTRA_STATUS);
+        Activity activity = (AppCompatActivity) getActivity();
+        if(status.equals("Add")){
+            activity.setTitle(R.string.new_account_menu);
+        } else {
+            activity.setTitle(R.string.edit_account_menu);
+        }
     }
 
     @Override
@@ -80,7 +91,7 @@ public class AddAccountFragment extends Fragment {
             save_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    add_save_account(titleET.getText().toString(), urlET.getText().toString(), usernameET.getText().toString(), passwordET.getText().toString(), oldTitle);
+                add_save_account(titleET.getText().toString(), urlET.getText().toString(), usernameET.getText().toString(), passwordET.getText().toString(), oldTitle);
                 }
             });
         }
@@ -108,10 +119,11 @@ public class AddAccountFragment extends Fragment {
                         // update
                         AccountList.get(getActivity()).updateAccount(oldTitle, a);
                         Toast.makeText(getContext(), R.string.success_update_account, Toast.LENGTH_LONG).show();
+                        Intent data = new Intent();
+                        data.putExtra(EXTRA_RESULT_TITLE, title);
+                        getActivity().setResult(Activity.RESULT_OK, data);
                     }
-
-                    Intent intent = new Intent(getContext(), PasswordManager.class);
-                    startActivity(intent);
+                    getActivity().finish();
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Unable to add / save account. " + e.toString(), Toast.LENGTH_LONG).show();
                 }
@@ -137,5 +149,9 @@ public class AddAccountFragment extends Fragment {
         if (title.equals("") || url.equals("") || username.equals("") || password.equals(""))
             return true;
         return false;
+    }
+
+    public static String getExtraResultTitle(Intent result){
+        return result.getStringExtra(EXTRA_RESULT_TITLE);
     }
 }

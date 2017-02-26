@@ -1,8 +1,8 @@
 package com.example.limcw.passwordmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 /**
@@ -11,8 +11,7 @@ import android.support.v4.app.Fragment;
 
 public class DisplayAccountActivity extends SingleFragmentActivity {
 
-    public static final String EXTRA_TITLE = "com.example.limcw.passwordmanager.title";
-    private Account mAccount;
+    private static final String EXTRA_TITLE = "com.example.limcw.passwordmanager.title";
 
     public static Intent newIntent(Context packageContext, String Title){
         Intent intent = new Intent(packageContext, DisplayAccountActivity.class);
@@ -21,7 +20,7 @@ public class DisplayAccountActivity extends SingleFragmentActivity {
     }
     @Override
     protected Fragment createFragment() {
-        return new DisplayAccountFragment();
+        String accountTitle = (String) getIntent().getSerializableExtra(EXTRA_TITLE);
+        return DisplayAccountFragment.newInstance(accountTitle);
     }
-
 }

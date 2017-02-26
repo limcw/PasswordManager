@@ -29,7 +29,7 @@ public class AccountCursorWrapper extends CursorWrapper {
         account.setURL(url);
         account.setUsername(username);
         account.setPassword(password);
-        account.setDate(new Date(date));
+        account.setLastUpdated(new Date(date));
 
         return account;
     }

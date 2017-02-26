@@ -1,5 +1,9 @@
 package com.example.limcw.passwordmanager;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,11 +25,21 @@ import android.widget.Toast;
 
 public class DisplayAccountFragment extends Fragment {
     private Account mAccount;
+    private static final String ARG_ACCOUNT_TITLE = "account_title";
+    private static final int REQUEST_TITLE = 0;
+    TextView mPassword;
+    TextView mTitle;
+    TextView mUrl;
+    TextView mUsername;
+    TextView mLastUpdated;
+    Button mEditButton;
+    Button mDeleteButton;
+    String result_title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String title = (String) getActivity().getIntent().getSerializableExtra(DisplayAccountActivity.EXTRA_TITLE);
+        String title = (String) getArguments().getSerializable(ARG_ACCOUNT_TITLE);
         mAccount = AccountList.get(getActivity()).getAccount(title);
     }
 
@@ -33,14 +47,15 @@ public class DisplayAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.display_account, container, false);
 
-        final TextView mPassword = (TextView) v.findViewById(R.id.password);
-        final TextView mTitle = (TextView) v.findViewById(R.id.title);
-        final TextView mUrl = (TextView) v.findViewById(R.id.url);
-        final TextView mUsername = (TextView) v.findViewById(R.id.username);
-        final TextView mLastupdated = (TextView) v.findViewById(R.id.lastupdated);
-        final Button mEditButton = (Button) v.findViewById(R.id.edit_button);
-        final Button mDeleteButton = (Button) v.findViewById(R.id.delete_button);
-        final ImageButton mPasswordViewButton = (ImageButton) v.findViewById(R.id.view_password_button);
+        mPassword = (TextView) v.findViewById(R.id.password);
+        mTitle = (TextView) v.findViewById(R.id.title);
+        mUrl = (TextView) v.findViewById(R.id.url);
+        mUsername = (TextView) v.findViewById(R.id.username);
+        mLastUpdated = (TextView) v.findViewById(R.id.lastupdated);
+        mEditButton = (Button) v.findViewById(R.id.edit_button);
+        mDeleteButton = (Button) v.findViewById(R.id.delete_button);
+        ImageButton mPasswordViewButton = (ImageButton) v.findViewById(R.id.view_password_button);
+        ImageButton mCopyUsername = (ImageButton) v.findViewById(R.id.copy_username_button);
 
         mPasswordViewButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -69,14 +84,12 @@ public class DisplayAccountFragment extends Fragment {
                         try {
                             String title = mAccount.getTitle();
                             boolean delete = AccountList.get(getActivity()).deleteAccount(title);
-                            if(delete){
+                            if (delete) {
                                 Toast.makeText(getContext(), R.string.success_delete_account, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getContext(), PasswordManager.class);
-                                startActivity(intent);
+                                getActivity().finish();
                             } else {
                                 Toast.makeText(getContext(), R.string.error_delete_account, Toast.LENGTH_LONG).show();
                             }
-
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Unable to delete account. " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -98,16 +111,61 @@ public class DisplayAccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = AddAccountActivity.newIntent(getActivity(), "Edit", mAccount.getTitle());
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_TITLE);
             }
         });
 
-        mTitle.setText((mAccount.getTitle()));
+        mCopyUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("label", mUsername.getText());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), R.string.copy_clipboard, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        updateUI();
+        return v;
+    }
+
+    private void updateUI() {
+        mTitle.setText(mAccount.getTitle());
         mUrl.setText(mAccount.getURL());
         mUsername.setText(mAccount.getUsername());
         mPassword.setText(mAccount.getPassword());
-        mLastupdated.setText(mAccount.getDate().toString());
+        mLastUpdated.setText(mAccount.getLastUpdated().toString());
+    }
 
-        return v;
+    public static DisplayAccountFragment newInstance(String title) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ACCOUNT_TITLE, title);
+
+        DisplayAccountFragment fragment = new DisplayAccountFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (result_title != null) {
+            mAccount = AccountList.get(getActivity()).getAccount(result_title);
+        }
+        updateUI();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_TITLE) {
+            if (data == null) {
+                return;
+            }
+            result_title = AddAccountFragment.getExtraResultTitle(data);
+        }
     }
 }

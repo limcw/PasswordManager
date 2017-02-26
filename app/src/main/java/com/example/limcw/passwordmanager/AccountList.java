@@ -68,7 +68,7 @@ public class AccountList {
         values.put(PasswordManagerDbSchema.PasswordManagerTable.Cols.URL, account.getURL().toString());
         values.put(PasswordManagerDbSchema.PasswordManagerTable.Cols.USERNAME, account.getUsername().toString());
         values.put(PasswordManagerDbSchema.PasswordManagerTable.Cols.PASSWORD, account.getPassword().toString());
-        values.put(PasswordManagerDbSchema.PasswordManagerTable.Cols.DATE, account.getDate().toString());
+        values.put(PasswordManagerDbSchema.PasswordManagerTable.Cols.DATE, account.getLastUpdated().toString());
 
         return values;
     }

@@ -7,4 +7,7 @@
     <string name="success_delete_account">Successfully delete account</string>
     <string name="error_delete_account">Failed to delete account</string>
     <string name="success_update_account">Successfully update account</string>
+    <string name="new_account_menu">New Account</string>
+    <string name="edit_account_menu">Edit Account</string>
+    <string name="copy_clipboard">Copied to clipboard</string>
 </resources>
